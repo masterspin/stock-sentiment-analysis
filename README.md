@@ -1,6 +1,1 @@
-# stock-sentimental-analysis
-# stock-sentimental-analysis
-# stock-sentimental-analysis
-# stock-sentimental-analysis
-# stock-sentimental-analysis
-# stock-sentimental-analysis
+# stock-sentiment-analysis
