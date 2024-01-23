@@ -6,17 +6,17 @@ tickersString = "MMM,AOS,ABT,ABBV,ACN,ADBE,AMD,AES,AFL,A,APD,ABNB,AKAM,ALB,ARE,A
 tickers = tickersString.split(",")
 
 start_date = "2022-12-30"
-end_date = "2023-12-31"
+end_date = "2024-01-04"
 
 all_returns = []
 
 for stock_symbol in tickers:
     stock_data = yf.download(stock_symbol, start=start_date, end=end_date)
     stock_data['Daily_Return'] = (stock_data['Close'] - stock_data['Close'].shift(1)) / stock_data['Close'].shift(1) * 100
-    stock_data = stock_data.dropna()
-    
-    # Extract the date and daily return columns, and rename the daily return column with the ticker symbol
     stock_data = stock_data[['Daily_Return']].rename(columns={'Daily_Return': stock_symbol})
+    
+    # Resample to daily frequency and use forward filling to fill missing values
+    stock_data = stock_data.resample('D').asfreq().bfill().ffill()
     
     all_returns.append(stock_data)
 
@@ -25,11 +25,15 @@ all_returns = pd.concat(all_returns, axis=1)
 all_returns = all_returns.rename(columns={"BRK-B": "BRK.B"})
 all_returns = all_returns.rename(columns={"BF-B": "BF.B"})
 
-all_returns.to_csv('dailyReturns.csv')
+all_returns = all_returns.loc['2023-01-01':'2023-12-31']
+
+# all_returns = all_returns.rename(columns={'Date': 'date'})
+
+all_returns.to_csv('filledDailyReturns.csv')
 
 print(all_returns)
 
-#accessing the dataframe example
+# Accessing the DataFrame example
 target_stock = 'EBAY'
 target_date = '2023-12-22'
 print(all_returns.loc[target_date, target_stock])
