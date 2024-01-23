@@ -2,3 +2,4 @@ finnhub-python
 python-dotenv
 pandas
 langdetect
+yfinance
