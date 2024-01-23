@@ -5,3 +5,4 @@ langdetect
 yfinance
 transformers
 torch
+scikit-learn
